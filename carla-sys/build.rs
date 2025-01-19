@@ -63,10 +63,11 @@ fn main() -> Result<()> {
     // Generate bindings
     let csrc_dir = CARGO_MANIFEST_DIR.join("csrc");
     let include_dirs = [carla_include_dir, csrc_dir];
-
+    
     autocxx_build::Builder::new("src/ffi.rs", &include_dirs)
+        .extra_clang_args(&["-std=c++20"])
         .build()?
-        .flag_if_supported("-std=c++14")
+        .flag_if_supported("-std=c++20")
         .compile("carla_rust");
 
     // Save generated bindings

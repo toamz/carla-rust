@@ -2,7 +2,6 @@
 
 #include <vector>
 #include "carla/geom/Location.h"
-#include "carla/rpc/GearPhysicsControl.h"
 #include "carla/rpc/WheelPhysicsControl.h"
 #include "carla/rpc/VehiclePhysicsControl.h"
 #include "carla_rust/geom.hpp"
@@ -10,7 +9,6 @@
 namespace carla_rust
 {
     namespace rpc {
-        using carla::rpc::GearPhysicsControl;
         using carla::rpc::WheelPhysicsControl;
         using carla::rpc::VehiclePhysicsControl;
         using carla::geom::Vector2D;
@@ -24,40 +22,34 @@ namespace carla_rust
             FfiVehiclePhysicsControl(
                 const std::vector<Vector2D> &in_torque_curve,
                 float in_max_rpm,
-                float in_moi,
-                float in_damping_rate_full_throttle,
-                float in_damping_rate_zero_throttle_clutch_engaged,
-                float in_damping_rate_zero_throttle_clutch_disengaged,
-                bool in_use_gear_autobox,
-                float in_gear_switch_time,
-                float in_clutch_strength,
+                float in_rev_up_moi,
+                bool in_use_automatic_gears,
+                float in_gear_change_time,
                 float in_final_ratio,
-                std::vector<GearPhysicsControl> &in_forward_gears,
+                std::vector<float> &in_forward_gear_ratios,
+                float in_change_up_rpm,
+                float in_change_down_rpm,
                 float in_mass, float in_drag_coefficient,
                 FfiLocation &in_center_of_mass,
                 const std::vector<Vector2D> &in_steering_curve,
                 std::vector<WheelPhysicsControl> &in_wheels,
-                bool in_use_sweep_wheel_collision)
-                : inner_(VehiclePhysicsControl(in_torque_curve,
-                                               in_max_rpm,
-                                               in_moi,
-                                               in_damping_rate_full_throttle,
-                                               in_damping_rate_zero_throttle_clutch_engaged,
-                                               in_damping_rate_zero_throttle_clutch_disengaged,
-                                               in_use_gear_autobox,
-                                               in_gear_switch_time,
-                                               in_clutch_strength,
-                                               in_final_ratio,
-                                               in_forward_gears,
-                                               in_mass,
-                                               in_drag_coefficient,
-                                               reinterpret_cast<const Location&>(in_center_of_mass),
-                                               in_steering_curve,
-                                               in_wheels,
-                                               in_use_sweep_wheel_collision
-                                               )
-                         )
-            {}
+                bool in_use_sweep_wheel_collision) {
+                    inner_.torque_curve = in_torque_curve;
+                    inner_.max_rpm = in_max_rpm;
+                    inner_.rev_up_moi = in_rev_up_moi;
+                    inner_.use_automatic_gears = in_use_automatic_gears;
+                    inner_.gear_change_time = in_gear_change_time;
+                    inner_.final_ratio = in_final_ratio;
+                    inner_.forward_gear_ratios = in_forward_gear_ratios;
+                    inner_.change_up_rpm = in_change_up_rpm;
+                    inner_.change_down_rpm = in_change_down_rpm;
+                    inner_.mass = in_mass;
+                    inner_.drag_coefficient = in_drag_coefficient;
+                    inner_.center_of_mass = reinterpret_cast<const Location&>(in_center_of_mass);
+                    inner_.steering_curve = in_steering_curve;
+                    inner_.wheels = in_wheels;
+                    inner_.use_sweep_wheel_collision = in_use_sweep_wheel_collision;
+            }
 
 
 
@@ -73,41 +65,32 @@ namespace carla_rust
                 return inner_.max_rpm;
             }
 
-            float moi() const {
-                return inner_.moi;
+            float rev_up_moi() const {
+                return inner_.rev_up_moi;
             }
 
-            float damping_rate_full_throttle() const {
-                return inner_.damping_rate_full_throttle;
+            bool use_automatic_gears() const {
+                return inner_.use_automatic_gears;
             }
 
-            float damping_rate_zero_throttle_clutch_engaged() const {
-                return inner_.damping_rate_zero_throttle_clutch_engaged;
-            }
-
-            float damping_rate_zero_throttle_clutch_disengaged() const {
-                return inner_.damping_rate_zero_throttle_clutch_disengaged;
-            }
-
-            bool use_gear_autobox() const {
-                return inner_.use_gear_autobox;
-            }
-
-            float gear_switch_time() const {
-                return inner_.gear_switch_time;
-            }
-
-            float clutch_strength() const {
-                return inner_.clutch_strength;
+            float gear_change_time() const {
+                return inner_.gear_change_time;
             }
 
             float final_ratio() const {
                 return inner_.final_ratio;
             }
 
+            const std::vector<float>& forward_gear_ratios() const {
+                return inner_.forward_gear_ratios;
+            }
 
-            const std::vector<GearPhysicsControl>& forward_gears() const {
-                return inner_.forward_gears;
+            float change_up_rpm() const {
+                return inner_.change_up_rpm;
+            }
+
+            float change_down_rpm() const {
+                return inner_.change_down_rpm;
             }
 
             float mass() const {

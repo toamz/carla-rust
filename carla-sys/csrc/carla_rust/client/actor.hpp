@@ -184,7 +184,7 @@ namespace carla_rust
             }
 
             std::shared_ptr<FfiVehicle> to_vehicle() const {
-                SharedPtr<Vehicle> ptr = boost::dynamic_pointer_cast<Vehicle>(inner_);
+                SharedPtr<Vehicle> ptr = std::dynamic_pointer_cast<Vehicle>(inner_);
                 if (ptr == nullptr) {
                     return nullptr;
                 } else {
@@ -193,7 +193,7 @@ namespace carla_rust
             }
 
             std::shared_ptr<FfiSensor> to_sensor() const {
-                SharedPtr<Sensor> ptr = boost::dynamic_pointer_cast<Sensor>(inner_);
+                SharedPtr<Sensor> ptr = std::dynamic_pointer_cast<Sensor>(inner_);
                 if (ptr == nullptr) {
                     return nullptr;
                 } else {
@@ -202,7 +202,7 @@ namespace carla_rust
             }
 
             std::shared_ptr<FfiTrafficSign> to_traffic_sign() const {
-                SharedPtr<TrafficSign> ptr = boost::dynamic_pointer_cast<TrafficSign>(inner_);
+                SharedPtr<TrafficSign> ptr = std::dynamic_pointer_cast<TrafficSign>(inner_);
                 if (ptr == nullptr) {
                     return nullptr;
                 } else {
@@ -211,7 +211,7 @@ namespace carla_rust
             }
 
             std::shared_ptr<FfiTrafficLight> to_traffic_light() const {
-                SharedPtr<TrafficLight> ptr = boost::dynamic_pointer_cast<TrafficLight>(inner_);
+                SharedPtr<TrafficLight> ptr = std::dynamic_pointer_cast<TrafficLight>(inner_);
                 if (ptr == nullptr) {
                     return nullptr;
                 } else {

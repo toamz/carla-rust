@@ -15,7 +15,7 @@ pub struct IncludeDirs {
     pub carla_third_party: PathBuf,
     pub recast: PathBuf,
     pub rpclib: PathBuf,
-    pub boost: PathBuf,
+    pub boost: Vec<PathBuf>,
     pub libpng: PathBuf,
 }
 
@@ -23,7 +23,7 @@ pub struct IncludeDirs {
 pub struct LibDirs {
     pub recast: PathBuf,
     pub rpclib: PathBuf,
-    pub boost: PathBuf,
+    pub boost: Vec<PathBuf>,
     pub libpng: PathBuf,
     pub libcarla_client: PathBuf,
 }
@@ -33,19 +33,21 @@ impl IncludeDirs {
         let Self {
             recast,
             rpclib,
-            boost,
+            mut boost,
             libpng,
             carla_source,
             carla_third_party,
         } = self;
-        vec![
+        let mut result = vec![
             recast,
             rpclib,
             libpng,
-            boost,
             carla_source,
             carla_third_party,
-        ]
+        ];
+        result.append(&mut boost);
+        
+        result
     }
 }
 
@@ -54,11 +56,19 @@ impl LibDirs {
         let Self {
             recast,
             rpclib,
-            boost,
+            mut boost,
             libpng,
             libcarla_client,
         } = self;
-        vec![recast, rpclib, libpng, boost, libcarla_client]
+        let mut result = vec![
+            recast,
+            rpclib,
+            libpng,
+            libcarla_client,
+        ];
+        result.append(&mut boost);
+        
+        result
     }
 }
 
@@ -86,16 +96,16 @@ where
     let carla_third_party_dir = carla_source_dir.join("third-party");
     let build_dir = carla_src_dir.join("Build");
 
-    let recast_dir = find_match(build_dir.join("recast-0b13b0-c*-install").to_str().unwrap())?;
+    let recast_dir = find_match(build_dir.join("_deps/recastnavigation-src/Recast").to_str().unwrap())?;
     let rpclib_dir = find_match(
         build_dir
-            .join("rpclib-v2.2.1_c5-c*-libstdcxx-install")
+            .join("_deps/rpclib-src/")
             .to_str()
             .unwrap(),
     )?;
-    let boost_dir = find_match(build_dir.join("boost-1.80.0-c*-install").to_str().unwrap())?;
+    let boost_dirs: Vec<PathBuf> = glob::glob(build_dir.join("_deps/boost-src/libs/*/include").to_str().unwrap())?.flatten().collect();
 
-    let libpng_dir = build_dir.join("libpng-1.6.37-install");
+    let libpng_dir = build_dir.join("_deps/libpng-src");
     ensure!(
         libpng_dir.exists(),
         "Unable to find '{}'",
@@ -103,10 +113,9 @@ where
     );
 
     let libcarla_client_lib_dir = build_dir
-        .join("libcarla-client-build.release")
         .join("LibCarla")
-        .join("cmake")
-        .join("client");
+        .join("CMakeFiles")
+        .join("carla-client.dir");
     ensure!(
         libpng_dir.exists(),
         "Unable to find '{}'",
@@ -116,16 +125,16 @@ where
     let include_dirs = IncludeDirs {
         carla_source: carla_source_dir,
         carla_third_party: carla_third_party_dir,
-        recast: recast_dir.join("include"),
+        recast: recast_dir.join("Include"),
         rpclib: rpclib_dir.join("include"),
-        boost: boost_dir.join("include"),
-        libpng: libpng_dir.join("include"),
+        boost: boost_dirs,
+        libpng: libpng_dir.clone(),
     };
     let lib_dirs = LibDirs {
-        recast: recast_dir.join("lib"),
-        rpclib: rpclib_dir.join("lib"),
-        boost: boost_dir.join("lib"),
-        libpng: libpng_dir.join("lib"),
+        recast: recast_dir,
+        rpclib: rpclib_dir,
+        boost: vec![],
+        libpng: libpng_dir,
         libcarla_client: libcarla_client_lib_dir,
     };
 

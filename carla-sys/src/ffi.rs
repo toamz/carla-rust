@@ -22,7 +22,6 @@ include_cpp! {
     #include "carla/rpc/VehicleAckermannControl.h"
     #include "carla/rpc/OpendriveGenerationParameters.h"
     #include "carla/rpc/TrafficLightState.h"
-    #include "carla/rpc/GearPhysicsControl.h"
     #include "carla/rpc/WeatherParameters.h"
     #include "carla/rpc/ObjectLabel.h"
 
@@ -110,7 +109,6 @@ include_cpp! {
     generate!("carla::rpc::LabelledPoint")
     generate!("carla::rpc::EpisodeSettings")
     generate_pod!("carla::rpc::ActorAttributeType")
-    generate_pod!("carla::rpc::GearPhysicsControl")
     generate_pod!("carla::rpc::WheelPhysicsControl")
     generate_pod!("carla::rpc::WeatherParameters")
     generate_pod!("carla::rpc::CityObjectLabel")

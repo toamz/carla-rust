@@ -4,7 +4,7 @@ use crate::geom::Location;
 use carla_sys::{
     carla::{
         geom::Vector2D,
-        rpc::{GearPhysicsControl, WheelPhysicsControl},
+        rpc::WheelPhysicsControl,
     },
     carla_rust::utils::{
         new_ffi_location_vector, new_gear_physics_control_vector, new_uint32_t_vector,
@@ -42,12 +42,6 @@ impl NewCxxVectorElement for u64 {
 impl NewCxxVectorElement for Vector2D {
     fn new_vector() -> UniquePtr<CxxVector<Self>> {
         new_vector_2d_vector()
-    }
-}
-
-impl NewCxxVectorElement for GearPhysicsControl {
-    fn new_vector() -> UniquePtr<CxxVector<Self>> {
-        new_gear_physics_control_vector()
     }
 }
 

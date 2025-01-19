@@ -34,7 +34,7 @@ namespace carla_rust
             }
 
             std::shared_ptr<FfiActor> to_actor() const {
-                SharedPtr<Actor> ptr = boost::static_pointer_cast<Actor>(inner_);
+                SharedPtr<Actor> ptr = std::static_pointer_cast<Actor>(inner_);
                 return std::make_shared<FfiActor>(std::move(ptr));
             }
 

@@ -4,7 +4,7 @@ use crate::{
 };
 use autocxx::prelude::*;
 use carla_sys::{
-    carla::rpc::{GearPhysicsControl, WheelPhysicsControl},
+    carla::rpc::WheelPhysicsControl,
     carla_rust::rpc::FfiVehiclePhysicsControl,
 };
 use nalgebra::{Translation3, Vector2};
@@ -21,7 +21,10 @@ pub struct VehiclePhysicsControl {
     pub gear_switch_time: f32,
     pub clutch_strength: f32,
     pub final_ratio: f32,
-    pub forward_gears: Vec<GearPhysicsControl>,
+    pub forward_gear_ratios: Vec<f32>,
+    pub forward_gear_ratios: Vec<f32>,
+    pub change_up_rpm: f32,
+    pub change_down_rpm: f32,
     pub mass: f32,
     pub drag_coefficient: f32,
     pub center_of_mass: Translation3<f32>,
@@ -43,7 +46,9 @@ impl VehiclePhysicsControl {
             gear_switch_time,
             clutch_strength,
             final_ratio,
-            ref forward_gears,
+            ref forward_gear_ratios,
+            change_up_rpm,
+            change_down_rpm,
             mass,
             drag_coefficient,
             ref center_of_mass,
@@ -100,7 +105,9 @@ impl VehiclePhysicsControl {
             gear_switch_time: from.gear_switch_time(),
             clutch_strength: from.clutch_strength(),
             final_ratio: from.final_ratio(),
-            forward_gears: from.forward_gears().iter().cloned().collect(),
+            forward_gear_ratios: from.forward_gear_ratios().iter().cloned().collect(),
+            change_up_rpm: from.change_up_rpm(),
+            change_down_rpm: from.change_down_rpm(),
             mass: from.mass(),
             drag_coefficient: from.drag_coefficient(),
             center_of_mass: from.center_of_mass().to_na_translation(),

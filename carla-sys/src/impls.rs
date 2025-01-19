@@ -156,7 +156,6 @@ unsafe impl Send for crate::carla_rust::road::element::FfiLaneMarking {}
 
 // carla::rpc
 unsafe impl Send for crate::carla::rpc::EpisodeSettings {}
-unsafe impl Send for crate::carla::rpc::GearPhysicsControl {}
 unsafe impl Send for crate::carla::rpc::LabelledPoint {}
 unsafe impl Send for crate::carla::rpc::OpendriveGenerationParameters {}
 unsafe impl Send for crate::carla::rpc::VehicleLightState {}
@@ -223,26 +222,6 @@ impl Clone for crate::carla_rust::rpc::FfiLabelledPoint {
         Self {
             location: self.location.clone(),
             label: self.label.clone(),
-        }
-    }
-}
-
-impl Debug for crate::carla::rpc::GearPhysicsControl {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        f.debug_struct("GearPhysicsControl")
-            .field("ratio", &self.ratio)
-            .field("down_ratio", &self.down_ratio)
-            .field("up_ratio", &self.up_ratio)
-            .finish()
-    }
-}
-
-impl Clone for crate::carla::rpc::GearPhysicsControl {
-    fn clone(&self) -> Self {
-        Self {
-            ratio: self.ratio,
-            down_ratio: self.down_ratio,
-            up_ratio: self.up_ratio,
         }
     }
 }

@@ -39,7 +39,7 @@ impl ActionBuffer {
     }
 
     pub(crate) fn as_slice(&self) -> &[FfiAction] {
-        let ptr = self.inner.as_ptr();
+        let ptr = FfiActionBuffer::as_ptr(&self.inner);
         unsafe { slice::from_raw_parts(ptr, self.len()) }
     }
 

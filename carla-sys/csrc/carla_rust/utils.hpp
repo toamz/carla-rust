@@ -9,7 +9,6 @@ namespace carla {
     }
 
     namespace rpc {
-        class GearPhysicsControl;
         class WheelPhysicsControl;
     }
 }
@@ -26,7 +25,6 @@ namespace carla_rust
 
     namespace utils {
         using carla::geom::Vector2D;
-        using carla::rpc::GearPhysicsControl;
         using carla::rpc::WheelPhysicsControl;
         using carla_rust::geom::FfiLocation;
         // using carla_rust::client::FfiActor;
@@ -78,10 +76,6 @@ namespace carla_rust
 
         std::vector<FfiLocation> new_ffi_location_vector() {
             return std::vector<FfiLocation> {};
-        }
-
-        std::vector<GearPhysicsControl> new_gear_physics_control_vector() {
-            return std::vector<GearPhysicsControl> {};
         }
 
         std::vector<WheelPhysicsControl> new_wheel_physics_control_vector() {
