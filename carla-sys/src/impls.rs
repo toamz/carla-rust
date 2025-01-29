@@ -226,40 +226,6 @@ impl Clone for crate::carla_rust::rpc::FfiLabelledPoint {
     }
 }
 
-impl Debug for crate::carla::rpc::WheelPhysicsControl {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        f.debug_struct("WheelPhysicsControl")
-            .field("tire_friction", &self.tire_friction)
-            .field("damping_rate", &self.damping_rate)
-            .field("max_steer_angle", &self.max_steer_angle)
-            .field("radius", &self.radius)
-            .field("max_brake_torque", &self.max_brake_torque)
-            .field("max_handbrake_torque", &self.max_handbrake_torque)
-            .field("lat_stiff_max_load", &self.lat_stiff_max_load)
-            .field("lat_stiff_value", &self.lat_stiff_value)
-            .field("long_stiff_value", &self.long_stiff_value)
-            .field("position", &self.position)
-            .finish()
-    }
-}
-
-impl Clone for crate::carla::rpc::WheelPhysicsControl {
-    fn clone(&self) -> Self {
-        Self {
-            tire_friction: self.tire_friction,
-            damping_rate: self.damping_rate,
-            max_steer_angle: self.max_steer_angle,
-            radius: self.radius,
-            max_brake_torque: self.max_brake_torque,
-            max_handbrake_torque: self.max_handbrake_torque,
-            lat_stiff_max_load: self.lat_stiff_max_load,
-            lat_stiff_value: self.lat_stiff_value,
-            long_stiff_value: self.long_stiff_value,
-            position: self.position.clone(),
-        }
-    }
-}
-
 // carla_rust::sensor
 unsafe impl Send for crate::carla_rust::sensor::FfiSensorData {}
 unsafe impl Sync for crate::carla_rust::sensor::FfiSensorData {}

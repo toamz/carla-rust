@@ -5,6 +5,7 @@
 #include "carla/rpc/WheelPhysicsControl.h"
 #include "carla/rpc/VehiclePhysicsControl.h"
 #include "carla_rust/geom.hpp"
+#include "carla_rust/rpc/wheel_physics_control.hpp"
 
 namespace carla_rust
 {
@@ -14,6 +15,7 @@ namespace carla_rust
         using carla::geom::Vector2D;
         using carla::geom::Location;
         using carla_rust::geom::FfiLocation;
+        using carla_rust::rpc::FfiWheelPhysicsControl;
 
         class FfiVehiclePhysicsControl {
         public:
@@ -32,7 +34,7 @@ namespace carla_rust
                 float in_mass, float in_drag_coefficient,
                 FfiLocation &in_center_of_mass,
                 const std::vector<Vector2D> &in_steering_curve,
-                std::vector<WheelPhysicsControl> &in_wheels,
+                std::vector<FfiWheelPhysicsControl> &in_wheels,
                 bool in_use_sweep_wheel_collision) {
                     inner_.torque_curve = in_torque_curve;
                     inner_.max_rpm = in_max_rpm;
@@ -47,7 +49,7 @@ namespace carla_rust
                     inner_.drag_coefficient = in_drag_coefficient;
                     inner_.center_of_mass = reinterpret_cast<const Location&>(in_center_of_mass);
                     inner_.steering_curve = in_steering_curve;
-                    inner_.wheels = in_wheels;
+                    inner_.wheels = reinterpret_cast<const std::vector<WheelPhysicsControl>&>(in_wheels);
                     inner_.use_sweep_wheel_collision = in_use_sweep_wheel_collision;
             }
 
@@ -109,8 +111,8 @@ namespace carla_rust
                 return inner_.steering_curve;
             }
 
-            const std::vector<WheelPhysicsControl>& wheels() const {
-                return inner_.wheels;
+            const std::vector<FfiWheelPhysicsControl>& wheels() const {
+                return reinterpret_cast<const std::vector<FfiWheelPhysicsControl>&>(inner_.wheels);
             }
 
             bool use_sweep_wheel_collision() const {

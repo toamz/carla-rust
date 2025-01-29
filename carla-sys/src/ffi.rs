@@ -109,7 +109,6 @@ include_cpp! {
     generate!("carla::rpc::LabelledPoint")
     generate!("carla::rpc::EpisodeSettings")
     generate_pod!("carla::rpc::ActorAttributeType")
-    generate_pod!("carla::rpc::WheelPhysicsControl")
     generate_pod!("carla::rpc::WeatherParameters")
     generate_pod!("carla::rpc::CityObjectLabel")
     generate_pod!("carla::rpc::ActorState")
