@@ -21,7 +21,7 @@ pub struct IncludeDirs {
 
 #[derive(Debug, Clone)]
 pub struct LibDirs {
-    pub recast: PathBuf,
+    pub recast: Vec<PathBuf>,
     pub rpclib: PathBuf,
     pub boost: Vec<PathBuf>,
     pub libpng: PathBuf,
@@ -54,19 +54,19 @@ impl IncludeDirs {
 impl LibDirs {
     pub fn into_vec(self) -> Vec<PathBuf> {
         let Self {
-            recast,
+            mut recast,
             rpclib,
             mut boost,
             libpng,
             libcarla_client,
         } = self;
         let mut result = vec![
-            recast,
             rpclib,
             libpng,
             libcarla_client,
         ];
         result.append(&mut boost);
+        result.append(&mut recast);
         
         result
     }
@@ -113,9 +113,7 @@ where
     );
 
     let libcarla_client_lib_dir = build_dir
-        .join("LibCarla")
-        .join("CMakeFiles")
-        .join("carla-client.dir");
+        .join("LibCarla");
     ensure!(
         libpng_dir.exists(),
         "Unable to find '{}'",
@@ -131,10 +129,16 @@ where
         libpng: libpng_dir.clone(),
     };
     let lib_dirs = LibDirs {
-        recast: recast_dir,
-        rpclib: rpclib_dir,
-        boost: vec![],
-        libpng: libpng_dir,
+        recast: vec![
+            build_dir.join("_deps/recastnavigation-build/Recast"),
+            build_dir.join("_deps/recastnavigation-build/DetourCrowd"),
+            build_dir.join("_deps/recastnavigation-build/Detour"),
+        ],
+        rpclib: build_dir.join("_deps/rpclib-build"),
+        boost: vec![
+            build_dir.join("_deps/boost-build/libs/filesystem"),
+        ],
+        libpng: build_dir.join("_deps/libpng-build"),
         libcarla_client: libcarla_client_lib_dir,
     };
 

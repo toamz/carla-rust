@@ -6,7 +6,7 @@ use std::{fs, path::Path, process::Command};
 pub const VERSION: &str = "0.9.14";
 
 pub const LIBS: &[&str] = &[
-    "static=carla_client",
+    "static=carla-client",
     "static=Recast",
     "static=Detour",
     "static=DetourCrowd",
