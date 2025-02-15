@@ -70,6 +70,10 @@ namespace carla_rust
             return std::vector<uint64_t>();
         }
 
+        std::vector<float> new_float_vector() {
+            return std::vector<float>();
+        }
+
         std::vector<Vector2D> new_vector_2d_vector() {
             return std::vector<Vector2D> {};
         }

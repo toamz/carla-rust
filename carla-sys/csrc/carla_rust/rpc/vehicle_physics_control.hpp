@@ -34,7 +34,7 @@ namespace carla_rust
                 float in_mass, float in_drag_coefficient,
                 FfiLocation &in_center_of_mass,
                 const std::vector<Vector2D> &in_steering_curve,
-                std::vector<FfiWheelPhysicsControl> &in_wheels,
+                //std::vector<FfiWheelPhysicsControl> &in_wheels,
                 bool in_use_sweep_wheel_collision) {
                     inner_.torque_curve = in_torque_curve;
                     inner_.max_rpm = in_max_rpm;
@@ -49,7 +49,9 @@ namespace carla_rust
                     inner_.drag_coefficient = in_drag_coefficient;
                     inner_.center_of_mass = reinterpret_cast<const Location&>(in_center_of_mass);
                     inner_.steering_curve = in_steering_curve;
-                    inner_.wheels = reinterpret_cast<const std::vector<WheelPhysicsControl>&>(in_wheels);
+                    // inner_.wheels = reinterpret_cast<const std::vector<WheelPhysicsControl>&>(in_wheels);
+                    // TODO: Cannot pass as CxxVector because this type is Opaque and autocxx doesn't support it
+                    // Option would be to use rust::Vec from cxx or make some wrapper which is not opaque
                     inner_.use_sweep_wheel_collision = in_use_sweep_wheel_collision;
             }
 

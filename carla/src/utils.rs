@@ -7,9 +7,8 @@ use carla_sys::{
         rpc::WheelPhysicsControl,
     },
     carla_rust::utils::{
-        new_ffi_location_vector, new_gear_physics_control_vector, new_uint32_t_vector,
-        new_uint64_t_vector, new_uint8_t_vector, new_vector_2d_vector,
-        new_wheel_physics_control_vector,
+        new_ffi_location_vector, new_uint32_t_vector, new_float_vector,
+        new_uint64_t_vector, new_uint8_t_vector, new_vector_2d_vector
     },
 };
 use cxx::{kind::Trivial, vector::VectorElement, CxxVector, ExternType, UniquePtr};
@@ -39,15 +38,15 @@ impl NewCxxVectorElement for u64 {
     }
 }
 
-impl NewCxxVectorElement for Vector2D {
+impl NewCxxVectorElement for f32 {
     fn new_vector() -> UniquePtr<CxxVector<Self>> {
-        new_vector_2d_vector()
+        new_float_vector()
     }
 }
 
-impl NewCxxVectorElement for WheelPhysicsControl {
+impl NewCxxVectorElement for Vector2D {
     fn new_vector() -> UniquePtr<CxxVector<Self>> {
-        new_wheel_physics_control_vector()
+        new_vector_2d_vector()
     }
 }
 
