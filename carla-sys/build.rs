@@ -1,5 +1,5 @@
 use anyhow::{anyhow, Result};
-use carla_src::libcarla_client;
+use carla_src::{libcarla_client, probe, Probe};
 use once_cell::sync::Lazy;
 #[allow(unused)]
 use std::path::Path;
@@ -44,8 +44,6 @@ fn main() -> Result<()> {
 
     // Prepare CARLA installation
     let install_dir = load_carla_install_dir()?;
-    let carla_lib_dir = install_dir.join("lib");
-    let carla_include_dir = install_dir.join("include");
 
     #[cfg(feature = "save-lib")]
     create_tarball(&install_dir, &*SAVE_PREBUILT_TARBALL)?;
@@ -53,7 +51,9 @@ fn main() -> Result<()> {
     // return;
 
     // Add library search paths
-    println!("cargo:rustc-link-search=native={}", carla_lib_dir.display());
+    for dir in &install_dir.lib_dirs.into_vec() {
+        println!("cargo:rustc-link-search=native={}", dir.display());
+    }
 
     // Link libraries
     for lib in libcarla_client::LIBS {
@@ -62,7 +62,8 @@ fn main() -> Result<()> {
 
     // Generate bindings
     let csrc_dir = CARGO_MANIFEST_DIR.join("csrc");
-    let include_dirs = [carla_include_dir, csrc_dir];
+    let mut include_dirs = install_dir.include_dirs.into_vec();
+    include_dirs.push(csrc_dir);
     
     autocxx_build::Builder::new("src/ffi.rs", &include_dirs)
         .extra_clang_args(&["-std=c++20"])
@@ -77,29 +78,15 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn load_carla_install_dir() -> Result<PathBuf> {
+fn load_carla_install_dir() -> Result<Probe> {
     #[cfg(feature = "build-lib")]
-    let install_dir = {
-        let src_dir = env::var_os("CARLA_DIR")
-            .map(PathBuf::from)
-            .unwrap_or_else(|| CARGO_MANIFEST_DIR.join("..").join("carla-simulator"));
-        build_libcarla_client(&src_dir)?;
-        install_libcarla_client(&src_dir)?
-    };
+    todo!();
 
     #[cfg(not(feature = "build-lib"))]
-    let install_dir = {
-        match env::var_os("CARLA_DIR") {
-            Some(src_dir) => install_libcarla_client(src_dir)?,
-            None => {
-                extract_prebuilt_libcarla_client()?
-                    .ok_or_else(|| anyhow!("No prebuild binaries for profile {}. \
-                                            Please use 'build-lib' feature to compile from source code", *TAG))?
-            }
-        }
+    return match env::var_os("CARLA_DIR") {
+        Some(carla_dir) => probe(carla_dir),
+        None => todo!(),
     };
-
-    Ok(install_dir)
 }
 
 #[cfg(not(feature = "build-lib"))]
