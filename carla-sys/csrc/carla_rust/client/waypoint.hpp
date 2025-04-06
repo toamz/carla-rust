@@ -105,12 +105,20 @@ namespace carla_rust
 
             std::shared_ptr<FfiWaypoint> GetRight() const {
                 auto ptr = inner_->GetRight();
-                return std::make_shared<FfiWaypoint>(std::move(ptr));
+                if (ptr) {
+                    return std::make_shared<FfiWaypoint>(std::move(ptr));
+                } else {
+                    return nullptr;
+                }
             }
 
             std::shared_ptr<FfiWaypoint> GetLeft() const {
                 auto ptr = inner_->GetLeft();
-                return std::make_shared<FfiWaypoint>(std::move(ptr));
+                if (ptr) {
+                    return std::make_shared<FfiWaypoint>(std::move(ptr));
+                } else {
+                    return nullptr;
+                }
             }
 
             std::unique_ptr<FfiLaneMarking> GetRightLaneMarking() const {

@@ -91,14 +91,14 @@ impl Waypoint {
         WaypointList::from_cxx(ptr).unwrap()
     }
 
-    pub fn left(&self) -> Waypoint {
+    pub fn left(&self) -> Option<Waypoint> {
         let ptr = self.inner.GetLeft();
-        Self::from_cxx(ptr).unwrap()
+        Self::from_cxx(ptr)
     }
 
-    pub fn right(&self) -> Waypoint {
+    pub fn right(&self) -> Option<Waypoint> {
         let ptr = self.inner.GetRight();
-        Self::from_cxx(ptr).unwrap()
+        Self::from_cxx(ptr)
     }
 
     pub fn right_lane_marking(&self) -> Option<LaneMarking> {
