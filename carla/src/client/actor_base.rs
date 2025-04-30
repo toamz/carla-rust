@@ -145,4 +145,8 @@ pub trait ActorBase: Clone {
     fn is_active(&self) -> bool {
         self.cxx_actor().IsActive()
     }
+
+    fn destroy(&self) -> bool {
+        self.cxx_actor().Destroy()
+    }
 }
