@@ -179,6 +179,10 @@ namespace carla_rust
                 return inner_->IsActive();
             }
 
+            bool Destroy() const {
+                return inner_->Destroy();
+            }
+
             const SharedPtr<Actor>& as_builtin() const {
                 return inner_;
             }
