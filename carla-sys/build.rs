@@ -88,9 +88,10 @@ fn load_carla_install_dir() -> Result<PathBuf> {
 
     #[cfg(not(feature = "build-lib"))]
     let install_dir = {
-        match env::var_os("CARLA_DIR") {
-            Some(src_dir) => install_libcarla_client(src_dir)?,
-            None => {
+        match (env::var_os("CARLA_TREE"), env::var_os("CARLA_DIR")) {
+            (Some(install_dir), _) => install_dir.into(),
+            (_, Some(src_dir)) => install_libcarla_client(src_dir)?,
+            _ => {
                 extract_prebuilt_libcarla_client()?
                     .ok_or_else(|| anyhow!("No prebuild binaries for profile {}. \
                                             Please use 'build-lib' feature to compile from source code", *TAG))?
