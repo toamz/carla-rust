@@ -14,6 +14,7 @@ namespace carla_rust
         using carla::client::WorldSnapshot;
         using carla::client::Timestamp;
         using carla_rust::rpc::FfiActorId;
+        using carla_rust::client::FfiActorSnapshot;
 
         // Map
         class FfiWorldSnapshot {
@@ -38,9 +39,14 @@ namespace carla_rust
                 return inner_.Contains(actor_id);
             }
 
-            // boost::optional<ActorSnapshot> Find(ActorId actor_id) const {
-            //     return _state->GetActorSnapshotIfPresent(actor_id);
-            // }
+            std::unique_ptr<FfiActorSnapshot> Find(FfiActorId actor_id) const {
+                boost::optional<ActorSnapshot> snapshot = inner_.Find(actor_id);
+                if (snapshot) {
+                    return std::make_unique<FfiActorSnapshot>(std::move(*snapshot));
+                } else {
+                    return nullptr;
+                }
+            }
 
             size_t size() const {
                 return inner_.size();

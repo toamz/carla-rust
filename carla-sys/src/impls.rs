@@ -36,6 +36,8 @@ unsafe impl Send for crate::carla_rust::client::FfiLandmarkList {}
 unsafe impl Sync for crate::carla_rust::client::FfiLandmarkList {}
 unsafe impl Send for crate::carla_rust::client::FfiWorldSnapshot {}
 unsafe impl Sync for crate::carla_rust::client::FfiWorldSnapshot {}
+unsafe impl Send for crate::carla_rust::client::FfiActorSnapshot {}
+unsafe impl Sync for crate::carla_rust::client::FfiActorSnapshot {}
 unsafe impl Send for crate::carla_rust::client::FfiWaypointList {}
 unsafe impl Sync for crate::carla_rust::client::FfiWaypointList {}
 

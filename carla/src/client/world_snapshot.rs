@@ -1,5 +1,5 @@
 use super::Timestamp;
-use crate::rpc::ActorId;
+use crate::{client::actor_snapshot::ActorSnapshot, rpc::ActorId};
 use carla_sys::carla_rust::client::FfiWorldSnapshot;
 use cxx::UniquePtr;
 use derivative::Derivative;
@@ -30,6 +30,10 @@ impl WorldSnapshot {
 
     pub fn contains(&self, actor_id: ActorId) -> bool {
         self.inner.Contains(actor_id)
+    }
+
+    pub fn find(&self, actor_id: ActorId) -> Option<ActorSnapshot> {
+        ActorSnapshot::from_cxx(self.inner.Find(actor_id))
     }
 
     pub(crate) fn from_cxx(ptr: UniquePtr<FfiWorldSnapshot>) -> Option<Self> {

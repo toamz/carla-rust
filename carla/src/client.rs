@@ -8,6 +8,7 @@ mod actor_blueprint;
 mod actor_builder;
 mod actor_kind;
 mod actor_list;
+mod actor_snapshot;
 mod actor_vec;
 mod blueprint_library;
 mod bounding_box_list;

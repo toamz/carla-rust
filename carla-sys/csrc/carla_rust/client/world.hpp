@@ -24,6 +24,7 @@
 #include "carla_rust/client/labelled_point_list.hpp"
 #include "carla_rust/client/environment_object_list.hpp"
 #include "carla_rust/client/actor_vec.hpp"
+#include "carla_rust/client/actor_snapshot.hpp"
 #include "carla_rust/client/world_snapshot.hpp"
 #include "carla_rust/client/light_manager.hpp"
 #include "carla_rust/rpc/vehicle_light_state_list.hpp"

@@ -46,6 +46,7 @@ include_cpp! {
     #include "carla/client/LightManager.h"
     #include "carla/client/Map.h"
     #include "carla/client/World.h"
+    #include "carla/client/ActorSnapshot.h"
     #include "carla/client/WorldSnapshot.h"
     #include "carla/client/Timestamp.h"
     #include "carla/client/Light.h"
@@ -128,6 +129,7 @@ include_cpp! {
     generate!("carla::client::Landmark")
     generate!("carla::client::Light")
     generate!("carla::client::LaneInvasionSensor")
+    generate!("carla::client::ActorSnapshot")
     generate!("carla::client::WorldSnapshot")
     generate_pod!("carla::client::Timestamp")
     generate!("carla::client::Light")
