@@ -27,6 +27,7 @@
 #include "carla_rust/client/actor_snapshot.hpp"
 #include "carla_rust/client/world_snapshot.hpp"
 #include "carla_rust/client/light_manager.hpp"
+#include "carla_rust/client/on_tick_callback.hpp"
 #include "carla_rust/rpc/vehicle_light_state_list.hpp"
 
 namespace carla_rust
@@ -139,6 +140,17 @@ namespace carla_rust
                 catch (TimeoutException &e) {
                     return nullptr;
                 }
+            }
+
+            size_t OnTick(void *caller, void *fn, void *delete_fn) {
+                auto container = std::make_shared<OnTickCallback>(caller, fn, delete_fn);
+                auto callback =
+                    [container = std::move(container)]
+                    (WorldSnapshot data)
+                    {
+                        (*container)(std::make_unique<FfiWorldSnapshot>(std::move(data)));
+                    };
+                return inner_.OnTick(std::move(callback));
             }
 
             uint64_t Tick(size_t millis) {

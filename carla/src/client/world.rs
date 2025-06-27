@@ -14,12 +14,14 @@ use crate::{
 };
 use anyhow::{anyhow, Result};
 use autocxx::prelude::*;
-use carla_sys::carla_rust::client::{FfiActor, FfiWorld};
+use carla_sys::carla_rust::client::{FfiActor, FfiWorld, FfiWorldSnapshot};
 use cxx::{let_cxx_string, CxxVector, UniquePtr};
 use derivative::Derivative;
 use nalgebra::{Isometry3, Translation3, Vector3};
 use static_assertions::assert_impl_all;
-use std::{ptr, time::Duration};
+use std::{mem, ptr, time::Duration};
+
+type OnTickCallback = dyn FnMut(UniquePtr<FfiWorldSnapshot>) + Send + 'static;
 
 const DEFAULT_TICK_TIMEOUT: Duration = Duration::from_secs(60);
 
@@ -198,6 +200,29 @@ impl World {
         self.inner.pin_mut().Tick(timeout.as_millis() as usize)
     }
 
+    pub fn on_tick<F>(&mut self, mut callback: F)
+    where
+        F: FnMut(WorldSnapshot) + Send + 'static,
+    {
+        unsafe {
+            let fn_ptr = {
+                let fn_ = move |ptr: UniquePtr<FfiWorldSnapshot>| {
+                    let data = WorldSnapshot::from_cxx(ptr).unwrap();
+                    (callback)(data);
+                };
+                let fn_: Box<OnTickCallback> = Box::new(fn_); // Create a trait object ("fat" pointer)
+                let fn_ = Box::new(fn_); // Create a "thin" pointer. The address is aliased
+                let fn_: *mut OnTickCallback = Box::into_raw(fn_); // Convert to raw pointer
+                fn_ as *mut c_void
+            };
+
+            let caller_ptr = caller as *mut c_void;
+            let deleter_ptr = deleter as *mut c_void;
+
+            self.inner.pin_mut().OnTick(caller_ptr, fn_ptr, deleter_ptr);
+        }
+    }
+
     pub fn tick(&mut self) -> u64 {
         self.tick_or_timeuot(DEFAULT_TICK_TIMEOUT)
     }
@@ -327,6 +352,18 @@ impl Clone for World {
     fn clone(&self) -> Self {
         Self::from_cxx(self.inner.clone().within_unique_ptr()).unwrap()
     }
+}
+
+unsafe extern "C" fn caller(fn_: *mut c_void, arg: *mut UniquePtr<FfiWorldSnapshot>) {
+    let fn_ = fn_ as *mut Box<OnTickCallback>;
+    let arg = arg.replace(UniquePtr::null());
+    (*fn_)(arg);
+}
+
+unsafe extern "C" fn deleter(fn_: *mut c_void) {
+    let fn_ = fn_ as *mut Box<OnTickCallback>;
+    let fn_: Box<Box<OnTickCallback>> = Box::from_raw(fn_);
+    mem::drop(fn_);
 }
 
 assert_impl_all!(World: Sync, Send);
