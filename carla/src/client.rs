@@ -41,6 +41,7 @@ pub use actor_blueprint::*;
 pub use actor_builder::*;
 pub use actor_kind::*;
 pub use actor_list::*;
+pub use actor_snapshot::*;
 pub use actor_vec::*;
 pub use blueprint_library::*;
 pub use bounding_box_list::*;
