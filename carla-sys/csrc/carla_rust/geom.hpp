@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "carla/geom/GeoLocation.h"
 #include "carla/geom/Transform.h"
 #include "carla/geom/Location.h"
 #include "carla/geom/Rotation.h"
@@ -12,6 +13,7 @@
 namespace carla_rust
 {
     namespace geom {
+        using carla::geom::GeoLocation;
         using carla::geom::Transform;
         using carla::geom::Location;
         using carla::geom::Rotation;
@@ -36,6 +38,31 @@ namespace carla_rust
         };
 
         static_assert(sizeof(FfiLocation) == sizeof(Location), "FfiLocation and Location size mismatch");
+
+        // GeoLocation
+        class FfiGeoLocation {
+        public:
+            double latitude;
+            double longitude;
+            double altitude;
+
+            FfiGeoLocation(GeoLocation &&base)
+                :
+                latitude(base.latitude),
+                longitude(base.longitude),
+                altitude(base.altitude)
+            {}
+
+            FfiGeoLocation transform(const FfiLocation &location) const {
+                return FfiGeoLocation(as_native().Transform(location.as_native()));
+            }
+
+            const GeoLocation& as_native() const {
+                return reinterpret_cast<const GeoLocation&>(*this);
+            }
+        };
+
+        static_assert(sizeof(FfiGeoLocation) == sizeof(GeoLocation), "FfiLocation and Location size mismatch");
 
         // Transform
         class FfiTransform {

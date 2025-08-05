@@ -2,6 +2,7 @@
 
 #include "carla/Memory.h"
 #include "carla/client/Map.h"
+#include "carla/geom/GeoLocation.h"
 #include "carla_rust/client/landmark_list.hpp"
 #include "carla_rust/client/transform_list.hpp"
 #include "carla_rust/client/waypoint_list.hpp"
@@ -13,6 +14,7 @@ namespace carla_rust {
 namespace client {
 using carla::SharedPtr;
 using carla::client::Map;
+using carla_rust::geom::FfiGeoLocation;
 using carla_rust::client::FfiLandmarkList;
 using carla_rust::client::FfiTransformList;
 using carla_rust::client::FfiWaypointList;
@@ -66,7 +68,11 @@ public:
 
   // std::vector<road::element::LaneMarking> CalculateCrossedLanes(
   // const geom::Location &origin,
-  // const geom::GeoLocation &GetGeoReference() const;
+
+  FfiGeoLocation GetGeoReference() const {
+    auto orig = inner_->GetGeoReference();
+    return FfiGeoLocation(std::move(orig));
+  }
 
   // std::vector<geom::Location> GetAllCrosswalkZones() const;
 

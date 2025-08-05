@@ -69,6 +69,7 @@ include_cpp! {
     generate_ns!("carla_rust")
     generate_pod!("carla_rust::client::FfiClientLightState")
     generate_pod!("carla_rust::geom::FfiLocation")
+    generate_pod!("carla_rust::geom::FfiGeoLocation")
     generate_pod!("carla_rust::geom::FfiTransform")
     generate_pod!("carla_rust::geom::FfiBoundingBox")
     generate_pod!("carla_rust::sensor::data::FfiColor")
@@ -88,7 +89,6 @@ include_cpp! {
     generate_pod!("carla::geom::Vector2D")
     generate_pod!("carla::geom::Vector3D")
     generate_pod!("carla::geom::Rotation")
-    generate_pod!("carla::geom::GeoLocation")
 
     // carla::traffic_manager
     generate_ns!("carla::traffic_manager::constants")

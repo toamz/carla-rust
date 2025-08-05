@@ -5,8 +5,10 @@ use nalgebra::{Isometry3, Point3, Translation3, UnitQuaternion, Vector2, Vector3
 use static_assertions::assert_impl_all;
 
 pub use carla_sys::{
-    carla::geom::{GeoLocation, Rotation, Vector2D, Vector3D},
-    carla_rust::geom::{FfiLocation as Location, FfiTransform as Transform},
+    carla::geom::{Rotation, Vector2D, Vector3D},
+    carla_rust::geom::{
+        FfiGeoLocation as GeoLocation, FfiLocation as Location, FfiTransform as Transform,
+    },
 };
 
 /// Extension trait for [Vector2D].
@@ -210,6 +212,7 @@ impl BoundingBox<f32> {
     }
 }
 
+assert_impl_all!(GeoLocation: Send, Sync);
 assert_impl_all!(Vector2D: Send, Sync);
 assert_impl_all!(Vector3D: Send, Sync);
 assert_impl_all!(Location: Send, Sync);

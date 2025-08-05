@@ -283,6 +283,30 @@ impl Clone for crate::carla::rpc::WheelPhysicsControl {
     }
 }
 
+// carla_rust::geom
+unsafe impl Send for crate::carla_rust::geom::FfiGeoLocation {}
+unsafe impl Sync for crate::carla_rust::geom::FfiGeoLocation {}
+
+impl Debug for crate::carla_rust::geom::FfiGeoLocation {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        f.debug_struct("FfiGeoLocation")
+            .field("latitude", &self.latitude)
+            .field("longitude", &self.longitude)
+            .field("altitude", &self.altitude)
+            .finish()
+    }
+}
+
+impl Clone for crate::carla_rust::geom::FfiGeoLocation {
+    fn clone(&self) -> Self {
+        Self {
+            latitude: self.latitude.clone(),
+            longitude: self.longitude.clone(),
+            altitude: self.altitude.clone(),
+        }
+    }
+}
+
 // carla_rust::sensor
 unsafe impl Send for crate::carla_rust::sensor::FfiSensorData {}
 unsafe impl Sync for crate::carla_rust::sensor::FfiSensorData {}

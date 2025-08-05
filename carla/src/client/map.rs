@@ -2,7 +2,7 @@ use core::slice;
 
 use super::{Junction, Landmark, LandmarkList, Waypoint, WaypointList};
 use crate::{
-    geom::{Location, LocationExt, Transform, TransformExt},
+    geom::{GeoLocation, Location, LocationExt, Transform, TransformExt},
     road::{LaneId, LaneType, RoadId},
 };
 use autocxx::WithinUniquePtr;
@@ -66,6 +66,10 @@ impl Map {
     pub fn generate_waypoints(&self, distance: f64) -> WaypointList {
         let waypoints = self.inner.GenerateWaypoints(distance);
         WaypointList::from_cxx(waypoints).unwrap()
+    }
+
+    pub fn geo_reference(&self) -> GeoLocation {
+        self.inner.GetGeoReference()
     }
 
     pub fn junction(&self, waypoint: &Waypoint) -> Junction {

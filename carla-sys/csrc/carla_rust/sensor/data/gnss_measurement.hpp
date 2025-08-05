@@ -9,8 +9,8 @@ namespace carla_rust
     namespace sensor {
         namespace data {
             using carla::SharedPtr;
-            using carla::geom::GeoLocation;
             using carla::sensor::data::GnssMeasurement;
+            using carla_rust::geom::FfiGeoLocation;
 
             class FfiGnssMeasurement {
             public:
@@ -19,8 +19,9 @@ namespace carla_rust
                     inner_(std::move(base))
                 {}
 
-                GeoLocation GetGeoLocation() const {
-                    return inner_->GetGeoLocation();
+                FfiGeoLocation GetGeoLocation() const {
+                    auto orig = inner_->GetGeoLocation();
+                    return FfiGeoLocation(std::move(orig));
                 }
 
                 double GetLongitude() const {
