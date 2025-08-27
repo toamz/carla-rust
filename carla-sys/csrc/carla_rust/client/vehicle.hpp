@@ -4,6 +4,7 @@
 #include "carla/Memory.h"
 #include "carla/client/Vehicle.h"
 #include "carla/rpc/AckermannControllerSettings.h"
+#include "carla/rpc/Command.h"
 #include "carla/rpc/VehicleControl.h"
 #include "carla/rpc/VehiclePhysicsControl.h"
 #include "carla/rpc/VehicleDoor.h"
@@ -19,6 +20,7 @@ namespace carla_rust
         using carla::SharedPtr;
         using carla::client::Vehicle;
         using carla::rpc::AckermannControllerSettings;
+        using carla::rpc::Command;
         using carla::rpc::VehicleControl;
         using carla::rpc::VehiclePhysicsControl;
         using carla::rpc::VehicleDoor;
@@ -46,6 +48,10 @@ namespace carla_rust
 
             void ApplyControl(const VehicleControl &control) const {
                 inner_->ApplyControl(control);
+            }
+
+            void ApplyControlSync(const VehicleControl &control) const {
+                inner_->GetWorld().GetEpisode().Lock()->ApplyBatchSync({Command::ApplyVehicleControl(inner_->GetId(), control)}, false);
             }
 
             void ApplyAckermannControl(const VehicleAckermannControl &control) const {

@@ -39,6 +39,10 @@ impl Vehicle {
         self.inner.ApplyControl(control);
     }
 
+    pub fn apply_control_sync(&self, control: &VehicleControl) {
+        self.inner.ApplyControlSync(control);
+    }
+
     pub fn control(&self) -> VehicleControl {
         self.inner.GetControl()
     }
