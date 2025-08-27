@@ -27,6 +27,7 @@ namespace carla_rust
         using carla_rust::rpc::FfiActorId;
         using carla_rust::geom::FfiLocation;
         using carla_rust::geom::FfiTransform;
+        using carla_rust::geom::FfiBoundingBox;
         using carla_rust::client::FfiActorAttributeValue;
         using carla_rust::client::FfiActorAttributeValueList;
 
@@ -56,6 +57,11 @@ namespace carla_rust
             FfiTransform GetTransform() const {
                 auto transform = inner_->GetTransform();
                 return FfiTransform(std::move(transform));
+            }
+
+            FfiBoundingBox GetBoundingBox() const {
+                auto bounding_box = inner_->GetBoundingBox();
+                return FfiBoundingBox(std::move(bounding_box));
             }
 
             FfiActorId GetId() const {

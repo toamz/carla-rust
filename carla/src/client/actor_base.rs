@@ -1,6 +1,6 @@
 use super::{Actor, ActorAttributeValueList, World};
 use crate::{
-    geom::{Location, LocationExt, Transform, TransformExt, Vector3D, Vector3DExt},
+    geom::{BoundingBox, Location, LocationExt, Transform, TransformExt, Vector3D, Vector3DExt},
     rpc::ActorId,
 };
 use autocxx::WithinUniquePtr;
@@ -56,6 +56,10 @@ pub trait ActorBase: Clone {
 
     fn transform(&self) -> Isometry3<f32> {
         self.cxx_actor().GetTransform().to_na()
+    }
+
+    fn bounding_box(&self) -> BoundingBox<f32> {
+        BoundingBox::from_native(&self.cxx_actor().GetBoundingBox())
     }
 
     fn velocity(&self) -> Vector3<f32> {
